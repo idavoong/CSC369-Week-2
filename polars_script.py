@@ -20,7 +20,7 @@ if __name__ == "__main__":
         .filter((pl.col("timestamp") >= start) & (pl.col("timestamp") <= end))
         .group_by("pixel_color")
         .len()
-        .max()
+        .sort("len", descending=True)
     )
 
     coord = (
@@ -28,7 +28,7 @@ if __name__ == "__main__":
         .filter((pl.col("timestamp") >= start) & (pl.col("timestamp") <= end))
         .group_by("coordinate")
         .len()
-        .max()
+        .sort("len", descending=True)
     )
 
     greatest_color = color.collect().row(0)[0]
@@ -38,6 +38,6 @@ if __name__ == "__main__":
 
     elapsed_time_ms = (end_time - start_time) / 1000000
 
-    print("Most placed color: \n", greatest_color)
-    print("Most placed pixel location: \n", greatest_coord)
+    print("Most placed color: ", greatest_color)
+    print("Most placed pixel location: ", greatest_coord)
     print("Time taken: ", elapsed_time_ms, "ms")
